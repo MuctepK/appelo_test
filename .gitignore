@@ -1,0 +1,13 @@
+env
+venv
+virtualenv
+.idea
+.vscode
+.DS_Store
+__pycache__
+*.pyc
+*.log
+*.sqlite3
+uploads
+settings_local.py
+config
