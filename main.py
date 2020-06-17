@@ -2,15 +2,35 @@ import os
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+
+
+class ImageParser:
+    def __init__(self, file):
+        self.file = file
+        self.img = Image.open('source-images/' + file)
+        self.draw = ImageDraw.Draw(self.img)
+        self.width, self.height = self.img.size
+        self.save_dir = 'output-images'
+        self.font = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 50)
+
+    def get_text(self):
+        author = self.file[:file.find('.jpg')]
+        name, surname = author.split('-')
+        name, surname = name.title(), surname.title()
+        self.text = "©{} {}".format(name, surname)
+        self.text_w, self.text_h = self.draw.textsize(self.text, self.font)
+
+    def set_text_and_save(self):
+        self.draw.text((self.width - self.text_w - 20, self.height - self.text_h - 20),
+                       self.text, (255, 255, 255), font=self.font)
+        self.img.save("{}/{}".format(self.save_dir, self.file))
+
+
 for file in os.listdir('source-images'):
-    img = Image.open('source-images/'+file)
-    draw = ImageDraw.Draw(img)
-    width, height = img.size
-    font = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 50)
-    author = file[:file.find('.jpg')]
-    name, surname = author.split('-')
-    name, surname = name.title(), surname.title()
-    text = "©{} {}".format(name, surname)
-    text_w, text_h = draw.textsize(text, font)
-    draw.text((width-text_w-20, height-text_h-20), text, (255, 255, 255), font=font)
-    img.save('output-images/'+file)
+    if file.endswith('.jpg'):
+        img = ImageParser(file)
+        img.get_text()
+        img.set_text_and_save()
+
+
+
